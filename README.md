@@ -103,7 +103,7 @@ Its still only supports running MT with PSGI.
       my $app = shift;
       $app->render('entry.tt', {
         blog => MT->model('blog')->load(1),
-        entry => [MT->model('entry')->load()],
+        entry => [MT->model('entry')->load($app->param('id'))],
       });
     };
     
