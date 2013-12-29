@@ -81,7 +81,6 @@ sub set_templates {
   my $app_class = ref $app;
   my $reader = Data::Section::Simple->new($app_class);
   my $templates = $reader->get_data_section;
-  $app->error('Nothing templates') unless $templates; 
   $app->{templates} = $templates;
 }
 
