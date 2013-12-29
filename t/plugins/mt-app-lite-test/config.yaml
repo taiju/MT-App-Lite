@@ -1,0 +1,9 @@
+name: mt-app-lite-test
+id: mt-app-lite-test
+key: mt-app-lite-test
+
+applications:
+  mt-app-lite-test:
+    handler: 'TestPlugin'
+    cgi_path: sub { '/' }
+    script: sub { 'test' }

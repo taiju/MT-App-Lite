@@ -200,10 +200,6 @@ If you want use other renderer, set renderer name to third argument.
 
 See `cpanfile`.
 
-# TODO
-
-- Write test.
-
 # LICENSE
 
 Copyright (C) HIGASHI Taiju.
