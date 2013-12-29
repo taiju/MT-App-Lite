@@ -69,7 +69,7 @@ MT::App::Lite is lightweight Movable Type base web application class.
 
 Its still only supports running MT with PSGI.
 
-# HOW TO USE WITN MT PLUGIN
+# HOW TO USE WITH A MT PLUGIN
 
 ## config.yaml
 
