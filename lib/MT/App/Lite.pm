@@ -3,7 +3,7 @@ package MT::App::Lite;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.1';
 
 use parent qw(MT::App);
 require MT;
