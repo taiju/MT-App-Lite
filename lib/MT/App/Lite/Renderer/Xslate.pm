@@ -1,5 +1,8 @@
 package MT::App::Lite::Renderer::Xslate;
 
+use strict;
+use warnings;
+
 use Text::Xslate;
 
 sub new {

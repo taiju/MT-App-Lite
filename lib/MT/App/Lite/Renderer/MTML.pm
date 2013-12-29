@@ -1,5 +1,8 @@
 package MT::App::Lite::Renderer::MTML;
 
+use strict;
+use warnings;
+
 use MT::Builder;
 use MT::Template::Context;
 
