@@ -26,22 +26,21 @@ sub init_request {
   $app->SUPER::init_request(@_);
   $app->add_methods( dispatch => \&dispatch );
   $app->{default_mode} = 'dispatch';
+  my $app_class = ref $app;
+
+  no strict 'refs';
+  my $renderer_name = ${"${app_class}::Renderer"} || 'Xslate';
+  $app->set_renderer($renderer_name) or return $app->error;
+  my $template_path = ${"${app_class}::TemplatePath"} || '';
+  $app->set_templates($template_path) or return $app->error;
 }
 
 sub dispatch {
   my $app = shift;
   my $app_class = ref $app;
   $app->router->{routes} = $app_class->router->{routes};
-  {
-    no strict 'refs';
-    my $subclass = ${"${app_class}::Renderer"} || 'Xslate';
-    $app->set_renderer($subclass);
-  }
-  return $app->error if $app->{_errstr};
-  $app->set_templates;
-  return $app->error if $app->{_errstr};
   my $route = $app->router->match($app->{query}->env);
-  return $app->error('Not Found') unless $route;
+  return $app->error('Not Found route') unless $route;
   my $code = $route->{code};
   delete $route->{code};
   $app->param($_, $route->{$_}) for keys %$route;
