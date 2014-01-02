@@ -6,7 +6,6 @@ use warnings;
 our $VERSION = '0.1';
 
 use parent qw(MT::App);
-require MT;
 
 use Router::Simple::Sinatraish;
 use Data::Section::Simple qw(get_data_section);
