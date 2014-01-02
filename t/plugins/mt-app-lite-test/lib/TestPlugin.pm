@@ -45,6 +45,14 @@ get '/foo/bar/baz' => sub {
   $app->render('foo/bar/baz', { xslate => 'xslate' });
 };
 
+get '/titles.json' => sub {
+  my $app = shift;
+  my @entries = MT->model('entry')->load({blog_id => 1});
+  my @titles = grep { $_} map { $_->title } @entries;
+  my $json = MT::Util::to_json(\@titles);
+  $app->render('titles.json', { json => $json });
+};
+
 1;
 
 __DATA__
@@ -53,3 +61,6 @@ __DATA__
 
 @@ mtml
 <$mt:Var name="mtml"$>
+
+@@ titles.json
+<: $json | mark_raw :>

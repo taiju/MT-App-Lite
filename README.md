@@ -14,7 +14,7 @@ MT::App::Lite - lightweight Movable Type base web application class
 
     get '/' => sub {
       my $app = shift;
-      $app->render('index.tt', {
+      $app->render('index.html', {
         blog => MT->model('blog')->load(1),
         entries => [MT->model('entry')->load({blog_id => 1})],
       });
@@ -22,17 +22,25 @@ MT::App::Lite - lightweight Movable Type base web application class
     
     get '/index_mt' => sub {
       my $app = shift;
-      $app->render('index_mt.mtml', {
+      $app->render('index_mt.html', {
         blog => MT->model('blog')->load(1),
         entries => [MT->model('entry')->load({blog_id => 1})],
       }, 'MTML');
+    };
+
+    get '/titles.json' => sub {
+      my $app = shift;
+      my @entries = MT->model('entry')->load({blog_id => 1});
+      my @titles = grep { $_} map { $_->title } @entries;
+      my $json = MT::Util::to_json(\@titles);
+      $app->render('titles.json', { json => $json });
     };
     
     1;
     
     __DATA__
     
-    @@ index.tt
+    @@ index.html
     <!doctype html>
     <html>
     <head>
@@ -48,7 +56,7 @@ MT::App::Lite - lightweight Movable Type base web application class
     </body>
     </html>
     
-    @@ index_mt.mtml
+    @@ index_mt.html
     <!doctype html>
     <html>
     <head>
@@ -63,6 +71,9 @@ MT::App::Lite - lightweight Movable Type base web application class
       </ul>
     </body>
     </html>
+
+    @@ titles.json
+    <: $json | mark_raw :>
 
 # DESCRIPTION
 
@@ -94,7 +105,7 @@ Its still only supports running MT with PSGI.
 
     get '/' => sub {
       my $app = shift;
-      $app->render('index.tt', {
+      $app->render('index.html', {
         blog => MT->model('blog')->load(1),
         entries => [MT->model('entry')->load({blog_id => 1})],
       });
@@ -102,17 +113,25 @@ Its still only supports running MT with PSGI.
 
     get '/entry/:id' => sub {
       my $app = shift;
-      $app->render('entry.tt', {
+      $app->render('entry.html', {
         blog => MT->model('blog')->load(1),
         entry => [MT->model('entry')->load($app->param('id'))],
       });
     };
-    
+
+    get '/titles.json' => sub {
+      my $app = shift;
+      my @entries = MT->model('entry')->load({blog_id => 1});
+      my @titles = grep { $_} map { $_->title } @entries;
+      my $json = MT::Util::to_json(\@titles);
+      $app->render('titles.json', { json => $json });
+    };
+   
     1;
     
     __DATA__
 
-    @@ index.tt
+    @@ index.html
     <!doctype html>
     <html>
     <head>
@@ -128,7 +147,7 @@ Its still only supports running MT with PSGI.
     </body>
     </html>
    
-    @@ entry.tt
+    @@ entry.html
     <!doctype html>
     <html>
     <head>
@@ -143,7 +162,10 @@ Its still only supports running MT with PSGI.
     </body>
     </html>
 
-Try to access `http://yourdomain/app/` and `http://yourdomain/app/entry/1`(entry\_id).
+    @@ titles.json
+    <: $json | mark_raw :>
+
+Try to access `http://yourdomain/app/`, `http://yourdomain/app/entry/1`(entry\_id) and `http://yourdomain/app/titles.json`.
 
 # FUNCTIONS AND METHODS
 
@@ -182,7 +204,7 @@ Set static template file path.
 
 ## $app->render($template\_name:Str, $param:HashRef[, $renderer:Str])
 
-    $app->render('index.tt', {
+    $app->render('index.html', {
       blog => MT->model('blog')->load(1),
       entries => [MT->model('entry')->load({blog_id => 1})],
     });
