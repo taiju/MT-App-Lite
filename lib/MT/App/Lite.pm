@@ -37,9 +37,9 @@ sub dispatch {
     my $subclass = ${"${app_class}::Renderer"} || 'Xslate';
     $app->set_renderer($subclass);
   }
-  return $app->error($app->{_errstr}) if $app->{_errstr};
+  return $app->error if $app->{_errstr};
   $app->set_templates;
-  return $app->error($app->{_errstr}) if $app->{_errstr};
+  return $app->error if $app->{_errstr};
   my $route = $app->router->match($app->{query}->env);
   return $app->error('Not Found') unless $route;
   my $code = $route->{code};
