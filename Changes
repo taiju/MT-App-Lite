@@ -1,5 +1,9 @@
+0.3  2014.01.03
+  - Support MIME Types 
+
 0.2  2014.01.02
   - Internal optimization.
   - Support static file templates.
+
 0.1  2013.12.30
   - First release.
