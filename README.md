@@ -9,7 +9,8 @@ MT::App::Lite - lightweight Movable Type base web application class
 
     use MT::App::Lite;
 
-    setup Renderer => 'Xslate';
+    setup Renderer     => 'Xslate';
+    setup TemplatePath => '/path/to/templates';
 
     get '/' => sub {
       my $app = shift;
@@ -168,11 +169,16 @@ SEE [Router::Simple::Sinatraish](http://search.cpan.org/~tokuhirom/Router-Simple
 
 ## setup($config:Str, $value:Str)
 
-    setup Renderer => 'MTML'
+    setup Renderer     => 'MTML';
+    setup TemplatePath => '/path/to/templates';
 
 ### Renderer (support (Xslate|MTML))
 
 Set renderer. Default renderer is Xslate.
+
+### TemplatePath
+
+Set static template file path.
 
 ## $app->render($template\_name:Str, $param:HashRef[, $renderer:Str])
 

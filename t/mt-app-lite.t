@@ -22,4 +22,6 @@ like $test->request(GET '/test/mtml-template')->content, qr/^mtml\s*/, 'Return b
 
 is $test->request(GET '/test/capture/hello')->content, 'hello', 'Get capture string as GET parameter';
 
+like $test->request(GET '/test/foo/bar/baz')->content, qr/^xslate\s*/, 'Return built template from file';
+
 done_testing;

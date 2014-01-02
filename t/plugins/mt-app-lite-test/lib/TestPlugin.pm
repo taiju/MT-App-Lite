@@ -5,6 +5,8 @@ use warnings;
 
 use MT::App::Lite;
 
+setup TemplatePath => 't/plugins/mt-app-lite-test/templates';
+
 get '/hello' => sub {
   'hello!';
 };
@@ -36,6 +38,11 @@ get '/mtml-template' => sub {
 get '/capture/:keyword' => sub {
   my $app = shift;
   $app->render_string('<: $keyword :>', { keyword => $app->param('keyword') });
+};
+
+get '/foo/bar/baz' => sub {
+  my $app = shift;
+  $app->render('/foo/bar/baz', { xslate => 'xslate' });
 };
 
 1;

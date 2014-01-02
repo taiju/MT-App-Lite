@@ -31,8 +31,7 @@ sub init_request {
   no strict 'refs';
   my $renderer_name = ${"${app_class}::Renderer"} || 'Xslate';
   $app->set_renderer($renderer_name) or return $app->error;
-  my $template_path = ${"${app_class}::TemplatePath"} || '';
-  $app->set_templates($template_path) or return $app->error;
+  $app->set_templates or return $app->error;
 }
 
 sub dispatch {
@@ -49,8 +48,8 @@ sub dispatch {
 
 sub render {
   my $app = shift;
-  my ($name, $param, $subclass) = @_;
-  my $tmpl = $app->{templates}->{$name};
+  my ($file_path, $param, $subclass) = @_;
+  my $tmpl = $app->{templates}->{$file_path} || $app->read_tmpl_from_file($file_path);
   return $app->error('Not Found Template') unless $tmpl;
   $app->set_renderer($subclass) if $subclass;
   return $app->error($app->{_errstr}) if $app->{_errstr};
@@ -63,6 +62,20 @@ sub render_string {
   $app->set_renderer($subclass) if $subclass;
   return $app->error($app->{_errstr}) if $app->{_errstr};
   $app->{renderer}->render_string($string, $param);
+}
+
+sub read_tmpl_from_file {
+  my $app = shift;
+  my $file_path = shift;
+  my $app_class = ref $app;
+  my $tmpl_path;
+  {
+    no strict 'refs';
+    $tmpl_path = ${"${app_class}::TemplatePath"};
+    $tmpl_path =~ s{/$}{};
+  }
+  my $fmgr = MT::FileMgr->new('Local') or die $app->error(MT::FileMgr->errstr);
+  $fmgr->get_data("$tmpl_path/$file_path");
 }
 
 sub set_renderer {
@@ -98,7 +111,8 @@ MT::App::Lite - lightweight Movable Type base web application class
 
   use MT::App::Lite;
 
-  setup Renderer => 'Xslate';
+  setup Renderer     => 'Xslate';
+  setup TemplatePath => '/path/to/templates';
 
   get '/' => sub {
     my $app = shift;
@@ -257,11 +271,16 @@ SEE L<Router::Simple::Sinatraish>.
 
 =head2 setup($config:Str, $value:Str)
 
-  setup Renderer => 'MTML'
+  setup Renderer     => 'MTML';
+  setup TemplatePath => '/path/to/templates';
 
 =head3 Renderer (support (Xslate|MTML))
 
 Set renderer. Default renderer is Xslate.
+
+=head3 TemplatePath
+
+Set static template file path.
 
 =head2 $app->render($template_name:Str, $param:HashRef[, $renderer:Str])
 
