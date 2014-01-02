@@ -42,7 +42,7 @@ get '/capture/:keyword' => sub {
 
 get '/foo/bar/baz' => sub {
   my $app = shift;
-  $app->render('/foo/bar/baz', { xslate => 'xslate' });
+  $app->render('foo/bar/baz', { xslate => 'xslate' });
 };
 
 1;
